@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= locals.title %></title> <!-- render value passed to the template using <%=  %> --> 
+    <meta name="description" content="<%= locals.description %>">
+    <link rel="stylesheet" href="/css/style.css"> <!-- because we have set express.static to public no need to add the full route/address for static files -->
+    <script type="text/javascript" defer src="/js/script.js"></script> <!-- defer will make sure that js script runs after the page is rendered -->
+</head>
+<body>
+
+    
+    <div class="container">
+        <%- include('../partials/search.ejs') %>
+        <%- include('../partials/header.ejs') %>
+        <main class="'main">
+            <%- body %>
+        </main>
+        <%- include('../partials/footer.ejs') %>
+    </div>
+    
+</body>
+</html>
+
+
