@@ -47,7 +47,6 @@ router.post('/admin', async(req, res)=>{
             return res.status(401).json({ msg:"Invalid credentials" })
         }
         
-        console.log(req.body);
         const isPasswordValid = await bcrypt.compare(password, user.password)
 
         if(!isPasswordValid){
@@ -67,7 +66,10 @@ router.post('/admin', async(req, res)=>{
 router.get('/dashboard', authMiddleware, async(req, res)=>{
     try {
         const data=await Post.find()
-        res.render('admin/dashboard', {data,layout: adminLayout})
+        const id = req.userId
+        const user = await User.findById({_id:id})
+        const username = user.username
+        res.render('admin/dashboard', {data, username, layout: adminLayout})
     } catch (error) {
         console.error(error);
     }
@@ -107,15 +109,12 @@ router.get('/edit-post/:id', authMiddleware, async(req, res)=>{
 })
 
 router.put('/edit-post/:id', authMiddleware, async(req, res)=>{
-    console.log("Inside edit route put");
     try{
-        console.log("Inside try");
         await Post.findByIdAndUpdate(req.params.id,{
             title: req.body.title,
             body: req.body.body,
             updatedAt: Date.now()  
         })
-        console.log("Post updated");
         res.redirect(`/edit-post/${req.params.id}`);
     }catch(err){
         console.error(err);
@@ -148,9 +147,8 @@ router.post("/register", async(req, res)=>{
         const hash = await bcrypt.hash(password, salt);
         try {
             // create the user
-            console.log("creating user");
             const user = await User.create({username, password: hash})
-            res.status(201).json({msg: "User created"})
+            res.render('../views/success_register')
         } catch (error) {
             if(error.code===11000){
                 res.status(409).json({msg: "User already in use"})
@@ -161,5 +159,10 @@ router.post("/register", async(req, res)=>{
         console.error(error);
     }
 })
+
+router.get('/logout', (req, res) => {
+    res.cookie('token', '', { expires: new Date(0), httpOnly: true });
+    res.redirect('/');
+});
 
 module.exports = router

@@ -102,24 +102,13 @@ img {
   }
 }
 
-.header__logo {
-  font-weight: 800;
-  font-size: 25px;
-  text-decoration: none;
-  grid-area: logo;
-}
-
-.header__logo:hover {
-  text-decoration: underline;
-}
-
 .header__nav {
   justify-content: center;
   display: flex;
   grid-area: menu;
 }
 
-.header__logo, .header__nav, .header__button {
+.header__nav, .header__button {
   width: 100%;
 }
 
@@ -178,11 +167,6 @@ img {
 .author__heading {
   margin-top: 10px;
   margin-bottom: 5px;
-}
-
-.author__body {
-  font-size: var(--font-size-md);
-  margin: 5px 0 40px 0;
 }
 
 
